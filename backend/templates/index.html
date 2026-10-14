@@ -1,53 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ title }}</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <main>
-    <h1>{{ title }}</h1>
-    <p class="sub">{{ description }} · LLM <span class="pill">{{ llm_mode }}</span></p>
-    <div class="grid">
-      <section class="card">
-        <h2>Create card</h2>
-        <form method="post" action="/ui/create">
-        <label>title</label><input name="title" placeholder="title" required />
-<label>body</label><input name="body" placeholder="body" required />
-<label>tags</label><input name="tags" placeholder="tags" required />
-          <button type="submit">Save</button>
-        </form>
-        <h2 style="margin-top:1.25rem">AI action: {{ action }}</h2>
-        <p class="sub">{{ action_desc }}</p>
-        <form method="post" action="/ui/action">
-          <label>prompt</label>
-          <textarea name="prompt" rows="4" placeholder="Describe what you need..."></textarea>
-          <button type="submit">Run {{ action }}</button>
-        </form>
-        {% if last_result %}
-        <h3>Last result</h3>
-        <pre>{{ last_result }}</pre>
-        {% endif %}
-      </section>
-      <section class="card">
-        <h2>{{ resource }} ({{ items|length }})</h2>
-        <table>
-          <thead><tr><th>id</th><th>data</th></tr></thead>
-          <tbody>
-          {% for item in items %}
-            <tr>
-              <td>{{ item.id }}</td>
-              <td><code>{{ item }}</code></td>
-            </tr>
-          {% else %}
-            <tr><td colspan="2">No items yet</td></tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </section>
-    </div>
-  </main>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="utf-8"/><title>{{ title }}</title><link rel="stylesheet" href="/static/styles.css"/></head><body><main>
+<h1>{{ title }}</h1><p class="sub">Search, tag, rate, and fork shared prompts.</p>
+<form method="get" action="/"><input name="q" value="{{ q }}" placeholder="Search"/><input name="tag" value="{{ tag }}" placeholder="tag"/><button type="submit">Filter</button></form>
+<div class="grid"><section class="card"><h2>Add prompt</h2><form method="post" action="/ui/prompts"><input name="title" required/><textarea name="body" rows="4"></textarea><input name="tags" placeholder="sales,onboarding"/><button type="submit">Save</button></form></section>
+<section class="card"><h2>Library</h2>{% for p in prompts %}<article class="card"><h3>{{ p.title }}</h3><p class="sub">{% for t in p.tags.split(',') if t %}<span class="pill">{{ t }}</span>{% endfor %}</p>
+<pre>{{ p.body[:400] }}</pre><form method="post" action="/ui/fork"><input type="hidden" name="prompt_id" value="{{ p.id }}"/><button type="submit" class="secondary">Fork</button></form></article>{% else %}<p class="sub">No prompts yet.</p>{% endfor %}</section></div></main></body></html>

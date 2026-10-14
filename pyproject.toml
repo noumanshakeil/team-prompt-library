@@ -1,0 +1,13 @@
+[project]
+name = "team-prompt-library"
+version = "2.0.0"
+description = "Shared team prompt library with tags, star ratings, searchable cards, and fork/copy flows — treat prompts as curated assets instead of one-off snippets."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
